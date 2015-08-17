@@ -595,6 +595,23 @@ services:
 
 Look at the built-in [Handlers](https://github.com/nelmio/NelmioApiDocBundle/tree/master/Extractor/Handler).
 
+### Overriding the URI
+
+You can override a method's URI by setting a `documentation_uri` property in the route's `options`:
+
+```yaml
+# app/config/routing.yml
+comments_delete:
+    path:     /comments/{id}
+    defaults: { _controller: your.controller.comments:delete }
+    methods:  [DELETE]
+    options:
+        documentation_uri: /prefix/comments/{id}
+```
+
+The resultant documentation for this method will display the overridden URI, as well as use this
+URI in the Sandbox.
+
 ### Configuration Reference
 
 ``` yaml

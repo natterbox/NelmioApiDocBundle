@@ -480,7 +480,12 @@ class ApiDoc
             $this->host = null;
         }
 
-        $this->uri    = $route->getPattern();
+        if (null !== $uri = $route->getOption('documentation_uri')) {
+            $this->uri = $uri;
+        } else {
+            $this->uri = $route->getPath();
+        }
+
         $this->method = $route->getRequirement('_method') ?: 'ANY';
     }
 

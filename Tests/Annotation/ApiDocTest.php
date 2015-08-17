@@ -13,6 +13,7 @@ namespace Nelmio\ApiDocBundle\Tests\Annotation;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Nelmio\ApiDocBundle\Tests\TestCase;
+use Symfony\Component\Routing\Route;
 
 class ApiDocTest extends TestCase
 {
@@ -372,5 +373,20 @@ class ApiDocTest extends TestCase
         $this->assertArrayHasKey(200, $map);
         $this->assertArrayHasKey(400, $map);
         $this->assertEquals($apiDoc->getOutput(), $map[200]);
+    }
+
+    public function testDocumentationUriRouteOption()
+    {
+        // First verify normal behaviour, where the route's path is used to define the URI.
+        $apiDoc = new ApiDoc(array());
+        $path = '/a/test/uri';
+        $route = new Route($path);
+        $apiDoc->setRoute($route);
+        $this->assertEquals($path, $apiDoc->toArray()['uri']);
+        // Now check that, when the 'documentation_uri' option is supplied, this is used instead.
+        $documentation_uri = '/a/test/uri/for/documentation';
+        $route->setOptions(array('documentation_uri' => $documentation_uri));
+        $apiDoc->setRoute($route);
+        $this->assertEquals($documentation_uri, $apiDoc->toArray()['uri']);
     }
 }
